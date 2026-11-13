@@ -9,7 +9,7 @@ Fork [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app) (AGPL-3.0) 
   „Apturn Social” w tytułach stron, ekran logowania bez marketingu Postiz.
 - Link do kodu źródłowego na ekranie logowania (AGPL-3.0 §13).
 - Język polski: `locales/pl/translation.json` + `pl` w `i18n.config.ts`
-  (zgłoszone do upstream osobnym PR).
+  (utrzymywane w tym forku; PR upstream #2427 zamknięty, wymagał CLA).
 - Nazwa „Postiz” w tekstach interfejsu (en, pl) zamieniona na „Apturn Social”.
 - Workflow `.github/workflows/apturn-image.yml` buduje `ghcr.io/madern/postiz-app:apturn-<tag>`;
   workflowy upstream usunięte z tej gałęzi.
