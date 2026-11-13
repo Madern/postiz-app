@@ -3,7 +3,6 @@ import { getT } from '@gitroom/react/translation/get.translation.service.backend
 export const dynamic = 'force-dynamic';
 import { ReactNode } from 'react';
 import loadDynamic from 'next/dynamic';
-import { TestimonialComponent } from '@gitroom/frontend/components/auth/testimonial.component';
 import { LogoTextComponent } from '@gitroom/frontend/components/ui/logo-text.component';
 import { MantineWrapper } from '@gitroom/react/helpers/mantine.wrapper';
 import { Toaster } from '@gitroom/react/toaster/toaster';
@@ -29,12 +28,22 @@ export default async function AuthLayout({
         </div>
         <div className="text-[36px] flex-1 pt-[88px] hidden lg:flex flex-col items-center">
           <div className="text-center">
-            Over <span className="text-[42px] text-[#FC69FF]">20,000+</span>{' '}
-            Entrepreneurs use
+            <span className="text-[#5b8cff]">Apturn Social</span>
             <br />
-            Postiz To Grow Their Social Presence
+            Planowanie i publikacja w mediach społecznościowych
           </div>
-          <TestimonialComponent />
+          {/* AGPL-3.0 §13: zmodyfikowana wersja Postiz, link do kodu źródłowego dla użytkowników */}
+          <div className="mt-auto pb-[20px] text-[13px] text-[#9a9a9a]">
+            Oparte na Postiz (AGPL-3.0) ·{' '}
+            <a
+              href="https://github.com/Madern/postiz-app/tree/apturn"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              Kod źródłowy
+            </a>
+          </div>
         </div>
       </div>
     </MantineWrapper>
