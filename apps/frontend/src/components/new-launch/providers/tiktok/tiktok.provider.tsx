@@ -49,7 +49,9 @@ const useCreatorInfo = () => {
   );
 
   return useSWR<CreatorInfo>(
-    integration?.id && integration.identifier === 'tiktok'
+    integration?.id &&
+      integration.identifier === 'tiktok' &&
+      !integration.refreshNeeded
       ? `tiktok-creator-info-${integration.id}`
       : null,
     load,
@@ -85,12 +87,12 @@ const useVideoDuration = (path?: string) => {
 const TikTokSettings: FC<{
   values?: any;
 }> = (props) => {
-  const { watch, register, setValue, getValues } = useSettings();
+  const { watch, register, setValue } = useSettings();
   const { value, integration } = useIntegration();
   const setBlocked = useLaunchStore((state) => state.setBlocked);
   const { data: creatorInfo } = useCreatorInfo();
   const t = useT();
-  const [publishNotes, setPublishNotes] = useState<Element | null>(null);
+  const [publishNotes, setPublishNotes] = useState<Element | null>();
 
   // Music and location come from the Business API (v1.3) - the legacy Content
   // Posting API used by the "tiktok" identifier has no such fields.
@@ -237,6 +239,16 @@ const TikTokSettings: FC<{
     }
   }, [disclose]);
 
+  // a post made through the API has the choices without the toggle
+  useEffect(() => {
+    if (
+      disclose === undefined &&
+      (brand_organic_toggle || brand_content_toggle)
+    ) {
+      setValue('disclose', true);
+    }
+  }, [disclose, brand_organic_toggle, brand_content_toggle]);
+
   useEffect(() => {
     if (creatorInfo?.commentDisabled) {
       setValue('comment', false);
@@ -298,8 +310,13 @@ const TikTokSettings: FC<{
           {t('tiktok_try_again_later', 'Please try again later.')}
         </div>
       )}
+      {/* the settings can be shown without the post screen around them */}
       {!isUploadMode &&
-        (publishNotes ? createPortal(consent, publishNotes) : null)}
+        (publishNotes
+          ? createPortal(consent, publishNotes)
+          : publishNotes === null && (
+              <div className="text-[13px] mb-[18px]">{consent}</div>
+            ))}
       {tiktokRestrictionNotice && (
         <div className="bg-tableBorder p-[10px] mb-[18px] rounded-[10px] flex gap-[10px] items-start text-[13px] text-balance">
           <div className="shrink-0 mt-[2px]">
@@ -473,11 +490,7 @@ const TikTokSettings: FC<{
             label={t('label_disclose_video_content', 'Disclose Video Content')}
             disabled={isUploadMode}
             {...register('disclose', {
-              // a post made through the API has the choices without the toggle
-              value: !!(
-                getValues('brand_organic_toggle') ||
-                getValues('brand_content_toggle')
-              ),
+              value: false,
             })}
           />
           {disclose && (brand_organic_toggle || brand_content_toggle) && (

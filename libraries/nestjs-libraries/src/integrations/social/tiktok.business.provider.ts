@@ -655,7 +655,7 @@ export class TiktokBusinessProvider
           ? { is_draft: true }
           : {
               privacy_level:
-                firstPost.settings.privacy_level || 'PUBLIC_TO_EVERYONE',
+                firstPost.settings.privacy_level || 'SELF_ONLY',
               disable_comment: !this.assetBoolean(firstPost.settings.comment),
               // TikTok's own recommended-music flag is only a fallback for
               // when no track could be picked from the trending list.

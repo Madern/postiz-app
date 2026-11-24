@@ -131,11 +131,13 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       blocked: state.blocked,
     }))
   );
-  const blockedChannels = dummy
-    ? []
-    : selectedIntegrations
-        .map((p) => blocked[p.integration.id])
-        .filter((p) => p);
+  // an existing post can keep the blocked channel as it is, it's checked on save
+  const blockedChannels =
+    dummy || existingData.integration
+      ? []
+      : selectedIntegrations
+          .map((p) => blocked[p.integration.id])
+          .filter((p) => p);
   const scheduleBlocked = blockedChannels.find((p) => !p?.now)?.reason;
   const nowBlocked = blockedChannels[0]?.reason;
   // the other channels of an existing post show and move only their own date
@@ -329,13 +331,6 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
 
   const schedule = useCallback(
     (type: 'draft' | 'now' | 'schedule' | 'update') => async () => {
-      const blockReason =
-        type === 'now' ? nowBlocked : type === 'schedule' && scheduleBlocked;
-      if (blockReason) {
-        toaster.show(blockReason, 'warning');
-        return;
-      }
-
       let republish = false;
       // the channels saved as another type, the rest are saved as `type`
       const saveAs: Record<string, 'draft' | 'schedule' | 'update'> = {};
@@ -562,6 +557,26 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
         if (whatToDo === 'republish') {
           republish = true;
         }
+      }
+
+      const blockedChannel = selectedIntegrations.find((p) => {
+        const block = !dummy && blocked[p.integration.id];
+        const saveType = saveTypeOf(p.integration.id);
+        return (
+          block &&
+          (saveType === 'now' || (saveType === 'schedule' && !block.now))
+        );
+      });
+      if (blockedChannel) {
+        toaster.show(
+          `${blockedChannel.integration.name}: ${
+            blocked[blockedChannel.integration.id]?.reason
+          }`,
+          'warning'
+        );
+        blockedChannel.ref?.current?.fix?.();
+        setShowSettings(true);
+        return;
       }
 
       setLoading(true);
@@ -836,8 +851,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       addEditSets,
       dummy,
       shortlinkPreferenceData,
-      nowBlocked,
-      scheduleBlocked,
+      blocked,
     ]
   );
 
@@ -1131,7 +1145,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
         {/* what a channel has to say before it's published */}
         <div
           id="publish-notes"
-          className="px-[20px] py-[10px] border-t border-newBorder text-[13px] flex flex-col gap-[4px] empty:hidden"
+          className="px-[20px] py-[10px] border-t border-newBorder text-[13px] flex flex-col gap-[4px] empty:hidden mobile:sticky mobile:bottom-0 mobile:z-[440] mobile:bg-newBgColorInner"
         />
         <div className="select-none h-[84px] py-[20px] border-t border-newBorder flex items-center mobile:hidden">
           <div className="flex-1 flex ps-[20px] gap-[8px]">

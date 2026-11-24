@@ -66,8 +66,8 @@ export class TikTokLocation {
 // post_info has no is_aigc, disable_duet or disable_stitch field.
 // music / location are TikTok Business only: the legacy TikTok provider ignores
 // them (its Content Posting API has no music_sound_info / location fields).
-// Fields stay required here (existing clients depend on it); the constraints are
-// documented, not enforced.
+// Fields stay required here (existing clients depend on it), except
+// privacy_level on UPLOAD; the constraints are documented, not enforced.
 export class TikTokDto {
   @ValidateIf((p) => p.title)
   @MaxLength(90)
