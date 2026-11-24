@@ -1145,7 +1145,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
         {/* what a channel has to say before it's published */}
         <div
           id="publish-notes"
-          className="px-[20px] py-[10px] border-t border-newBorder text-[13px] flex flex-col gap-[4px] empty:hidden mobile:sticky mobile:bottom-0 mobile:z-[440] mobile:bg-newBgColorInner"
+          className="px-[20px] py-[10px] border-t border-newBorder text-[13px] flex flex-col gap-[4px] empty:hidden mobile:sticky mobile:bottom-[68px] mobile:z-[440] mobile:bg-newBgColorInner"
         />
         <div className="select-none h-[84px] py-[20px] border-t border-newBorder flex items-center mobile:hidden">
           <div className="flex-1 flex ps-[20px] gap-[8px]">
