@@ -681,6 +681,10 @@ export const AddProviderComponent: FC<{
         >
           {social
             .filter((item) => {
+              if (item.isChromeExtension && !extensionId) {
+                return false;
+              }
+
               if (!props.invite) {
                 return true;
               }

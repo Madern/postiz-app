@@ -16,7 +16,7 @@ Fork [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app) (AGPL-3.0) 
   linki docs.postiz.com, CLI, konektory z katalogów Claude/ChatGPT, film w onboardingu.
 - Celowo zostają: `mcp.relay.service.ts` i `agencies.service.ts` (nieosiągalne u nas), opinie
   klientów Postiza w `testomonials.tsx` (nieużywane; nie wolno ich podpisać naszą nazwą),
-  nazwa CLI `postiz` w opisach narzędzi MCP, User-Agent, schemat `postiz://`.
+  narzędzie MCP `ask_postiz`, User-Agent do WordPressa i Tumblra, schemat `postiz://`.
 - Plan przenosin na własną domenę i zrzuty leżą lokalnie w `docs/` (repo jest publiczne, katalog poza gitem).
 - Workflow `.github/workflows/apturn-image.yml` buduje `ghcr.io/madern/postiz-app:apturn-<tag>`
   (tagi produkcyjne tylko z gałęzi `apturn`, gałąź `apturn-rebrand` dostaje `:apturn-rebrand`);

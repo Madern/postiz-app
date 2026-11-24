@@ -380,19 +380,19 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
 
   const apiSection = (
     <>
-      <div className="bg-newBgColorInnerInner rounded-[12px] border border-newBorder px-[20px] py-[14px] flex items-center justify-between gap-[12px]">
-        <div>
-          <div className="text-[15px] font-[600]">
-            {t('documentation', 'Documentation')}
+      {billingEnabled && (
+        <div className="bg-newBgColorInnerInner rounded-[12px] border border-newBorder px-[20px] py-[14px] flex items-center justify-between gap-[12px]">
+          <div>
+            <div className="text-[15px] font-[600]">
+              {t('documentation', 'Documentation')}
+            </div>
+            <div className="text-[13px] text-customColor18 mt-[2px]">
+              {t(
+                'api_onboarding_description',
+                'Use the Apturn Social API from your own code, n8n or any other automation'
+              )}
+            </div>
           </div>
-          <div className="text-[13px] text-customColor18 mt-[2px]">
-            {t(
-              'api_onboarding_description',
-              'Use the Apturn Social API from your own code, n8n or any other automation'
-            )}
-          </div>
-        </div>
-        {billingEnabled && (
           <a
             className="cursor-pointer px-[24px] h-[44px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[14px] font-[600] flex items-center gap-[8px] shrink-0"
             href="https://docs.postiz.com/public-api/introduction"
@@ -401,8 +401,8 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
             <McpClientIcon client={apiTab} size={18} />
             {t('read_the_api_docs', 'Read the API docs')}
           </a>
-        )}
-      </div>
+        </div>
+      )}
       <div className="bg-newBgColorInnerInner rounded-[12px] border border-newBorder overflow-hidden">
         <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder">
           <div className="text-[15px] font-[600]">
