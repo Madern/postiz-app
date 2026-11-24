@@ -3,7 +3,7 @@ import { sanitizePostContent } from '@gitroom/helpers/utils/sanitize.post.conten
 export const dynamic = 'force-dynamic';
 import { Metadata } from 'next';
 import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
-import SafeImage from '@gitroom/react/helpers/safe.image';
+import { Logo } from '@gitroom/frontend/components/new-layout/logo';
 import Link from 'next/link';
 import { CommentsComponents } from '@gitroom/frontend/components/preview/comments.components';
 import { PreviewCommentsProvider } from '@gitroom/frontend/components/preview/preview.comments.context';
@@ -59,9 +59,7 @@ export default async function Auth(
             href="/"
             className="flex items-center gap-[10px] text-textColor"
           >
-            <div className="w-[44px]">
-              <SafeImage src={'/logo.svg'} width={44} height={44} alt="Logo" />
-            </div>
+            <Logo />
             <div className="text-[20px] font-[600]">Apturn Social</div>
           </Link>
           <div className="flex-1" />
