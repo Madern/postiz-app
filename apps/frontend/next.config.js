@@ -39,7 +39,9 @@ const nextConfig = {
       {
         // AGPL-3.0 §13: link do kodu źródłowego z ekranu logowania
         source: '/source',
-        destination: 'https://github.com/Madern/postiz-app/tree/apturn',
+        destination: `https://github.com/Madern/postiz-app/tree/${
+          process.env.SOURCE_REF || 'apturn'
+        }`,
         permanent: false,
       },
       {
