@@ -33,14 +33,15 @@ export const OnboardingModal: FC<OnboardingModalProps> = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const modals = useModals();
   const t = useT();
+  const { billingEnabled } = useVariables();
 
   const steps = useMemo(
     () => [
       t('connect_channels', 'Connect Channels'),
       t('connect_agents', 'Connect Agents'),
-      t('watch_tutorial', 'Watch Tutorial'),
+      ...(billingEnabled ? [t('watch_tutorial', 'Watch Tutorial')] : []),
     ],
-    [t]
+    [t, billingEnabled]
   );
 
   return (
@@ -110,7 +111,7 @@ export const OnboardingModal: FC<OnboardingModalProps> = ({ onClose }) => {
             {step === 2 && (
               <OnboardingStep2
                 onBack={() => setStep(1)}
-                onNext={() => setStep(3)}
+                onNext={billingEnabled ? () => setStep(3) : onClose}
               />
             )}
             {step === 3 && (
@@ -294,8 +295,8 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
   const mcpBase = mcpUrl || backendUrl;
   const apiKey = user?.publicApi || '';
   const available = !!apiKey && !!user?.tier?.public_api;
-  // the official connectors work for self-hosted installs too
-  const officialConnectors = billingEnabled || isSelfHosted;
+  // the directory connectors are the upstream cloud's, not ours
+  const officialConnectors = billingEnabled;
 
   const { config, hint } =
     agent === apiTab
@@ -342,7 +343,7 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
         <div className="text-[13px] text-customColor18 mt-[2px]">
           {t(
             'chat_onboarding_description',
-            'No MCP or CLI settings needed. Paste this into the chat, the agent installs the Postiz CLI and asks you for your API key.'
+            'No MCP or CLI settings needed. Paste this into the chat, the agent installs the Apturn Social CLI and asks you for your API key.'
           )}
         </div>
       </div>
@@ -387,18 +388,20 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
           <div className="text-[13px] text-customColor18 mt-[2px]">
             {t(
               'api_onboarding_description',
-              'Use the Postiz API from your own code, n8n or any other automation'
+              'Use the Apturn Social API from your own code, n8n or any other automation'
             )}
           </div>
         </div>
-        <a
-          className="cursor-pointer px-[24px] h-[44px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[14px] font-[600] flex items-center gap-[8px] shrink-0"
-          href="https://docs.postiz.com/public-api/introduction"
-          target="_blank"
-        >
-          <McpClientIcon client={apiTab} size={18} />
-          {t('read_the_api_docs', 'Read the API docs')}
-        </a>
+        {billingEnabled && (
+          <a
+            className="cursor-pointer px-[24px] h-[44px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[14px] font-[600] flex items-center gap-[8px] shrink-0"
+            href="https://docs.postiz.com/public-api/introduction"
+            target="_blank"
+          >
+            <McpClientIcon client={apiTab} size={18} />
+            {t('read_the_api_docs', 'Read the API docs')}
+          </a>
+        )}
       </div>
       <div className="bg-newBgColorInnerInner rounded-[12px] border border-newBorder overflow-hidden">
         <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder">
@@ -441,12 +444,12 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
           {isSelfHosted
             ? t(
                 'connector_self_hosted_description',
-                'The official connector works with self-hosted Postiz too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
+                'The official connector works with self-hosted Apturn Social too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
                 { url: mcpBase, interpolation: { escapeValue: false } }
               )
             : t(
                 'connector_onboarding_description',
-                'The fastest way: add Postiz with one click, you will be asked to sign in'
+                'The fastest way: add Apturn Social with one click, you will be asked to sign in'
               )}
         </div>
       </div>
@@ -468,7 +471,7 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
         <div className="text-[13px] text-customColor18 mt-[2px]">
           {t(
             'mcp_onboarding_description',
-            'Give your agent Postiz tools to create, schedule and manage posts'
+            'Give your agent Apturn Social tools to create, schedule and manage posts'
           )}
         </div>
       </div>
@@ -491,7 +494,7 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
                 onClick={() => setAuth(m)}
               >
                 {m === 'oauth'
-                  ? t('sign_in_no_api_key', 'Sign in with Postiz (no API key)')
+                  ? t('sign_in_no_api_key', 'Sign in with Apturn Social (no API key)')
                   : t('api_key', 'API Key')}
               </button>
             ))}
@@ -503,7 +506,7 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
             {auth === 'oauth' &&
               ` ${t(
                 'oauth_sign_in_hint',
-                'Your agent will open a browser window to sign in to Postiz.'
+                'Your agent will open a browser window to sign in to Apturn Social.'
               )}`}
           </div>
           <pre className="bg-newBgColorInner border border-newBorder rounded-[8px] p-[12px] text-[12px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.5]">
@@ -533,7 +536,7 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
         <div className="text-[13px] text-customColor18 mt-[2px]">
           {t(
             'cli_onboarding_description',
-            'Install the Postiz CLI and the skill that teaches your agent how to use it'
+            'Install the Apturn Social CLI and the skill that teaches your agent how to use it'
           )}
         </div>
       </div>
@@ -568,7 +571,9 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
       {available ? (
         <div className="flex flex-col gap-[16px] w-full max-w-[1100px] mx-auto">
           <div className="flex flex-wrap justify-center gap-[6px]">
-            {[...onboardingAgents, otherTab, apiTab].map((item) => (
+            {[...onboardingAgents, otherTab, apiTab]
+              .filter((item) => billingEnabled || item !== 'Grok Bot')
+              .map((item) => (
               <button
                 key={item}
                 type="button"
@@ -618,9 +623,9 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
           ) : (
             <>
               {connectorSection}
-              <div className="grid grid-cols-2 gap-[16px]">
+              <div className={clsx('grid gap-[16px]', billingEnabled && 'grid-cols-2')}>
                 {mcpSection}
-                {cliSection}
+                {billingEnabled && cliSection}
               </div>
             </>
           )}
@@ -699,12 +704,12 @@ const OnboardingStep3: FC<{ onBack: () => void; onFinish: () => void }> = ({
     <div className="flex flex-col gap-[24px] flex-1">
       <div className="flex gap-[4px] flex-col text-center">
         <div className="text-[24px] font-semibold">
-          {t('watch_tutorial_title', 'Learn How to Use Postiz')}
+          {t('watch_tutorial_title', 'Learn How to Use Apturn Social')}
         </div>
         <div className="text-[14px] text-customColor18">
           {t(
             'watch_tutorial_description',
-            'Watch this short video to learn how to get the most out of Postiz'
+            'Watch this short video to learn how to get the most out of Apturn Social'
           )}
         </div>
       </div>
@@ -715,7 +720,7 @@ const OnboardingStep3: FC<{ onBack: () => void; onFinish: () => void }> = ({
           <iframe
             className="h-full aspect-video"
             src="https://www.youtube.com/embed/BdsCVvEYgHU?si=vvhaZJ8I5oXXvVJS?autoplay=1"
-            title="Postiz Tutorial"
+            title="Apturn Social Tutorial"
             allow="autoplay"
             allowFullScreen
           />

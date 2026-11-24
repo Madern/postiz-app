@@ -934,5 +934,7 @@
   "connect_link_close": "Coś się nie zgadza? Zamknij tę stronę, a nic nie zostanie połączone.",
   "connect_link_secured_by": "Zabezpieczone przez",
   "connect_link_expired": "Ten link jest już nieważny",
-  "connect_link_expired_description": "Linki do połączenia działają przez godzinę. Poproś osobę, która Ci go przesłała, o nowy."
+  "connect_link_expired_description": "Linki do połączenia działają przez godzinę. Poproś osobę, która Ci go przesłała, o nowy.",
+  "auth_tagline": "Planowanie i publikacja w mediach społecznościowych",
+  "source_code": "Kod źródłowy"
 }

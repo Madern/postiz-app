@@ -30,18 +30,18 @@ export default async function AuthLayout({
           <div className="text-center">
             <span className="text-[#5b8cff]">Apturn Social</span>
             <br />
-            Planowanie i publikacja w mediach społecznościowych
+            {t('auth_tagline', 'Plan and publish your social media posts')}
           </div>
           {/* AGPL-3.0 §13: zmodyfikowana wersja Postiz, link do kodu źródłowego dla użytkowników */}
           <div className="mt-auto pb-[20px] text-[13px] text-[#9a9a9a]">
-            Oparte na Postiz (AGPL-3.0) ·{' '}
+            Open source (AGPL-3.0) ·{' '}
             <a
-              href="https://github.com/Madern/postiz-app/tree/apturn"
+              href="/source"
               target="_blank"
               rel="noopener noreferrer"
               className="underline"
             >
-              Kod źródłowy
+              {t('source_code', 'Source code')}
             </a>
           </div>
         </div>

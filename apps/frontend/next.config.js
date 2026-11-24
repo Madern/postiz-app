@@ -37,6 +37,12 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        // AGPL-3.0 §13: link do kodu źródłowego z ekranu logowania
+        source: '/source',
+        destination: 'https://github.com/Madern/postiz-app/tree/apturn',
+        permanent: false,
+      },
+      {
         source: '/api/uploads/:path*',
         destination:
           process.env.STORAGE_PROVIDER === 'local' ? '/uploads/:path*' : '/404',

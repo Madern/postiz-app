@@ -72,6 +72,9 @@ export class EmailService {
       return;
     }
 
+    // digest.email.workflow.ts hardcodes this prefix and workflow files can't be changed
+    subject = subject.replace('[Postiz]', `[${process.env.EMAIL_FROM_NAME}]`);
+
     const modifiedHtml = `
     <div style="
         background: linear-gradient(to bottom right, #e6f2ff, #f0e6ff);

@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - apturn
+      - apturn-rebrand
 
 permissions:
   contents: read
@@ -36,11 +37,14 @@ jobs:
         run: |
           IMG=ghcr.io/madern/postiz-app
           SHORT=$(git rev-parse --short HEAD)
+          # Tagi produkcyjne tylko z gałęzi apturn; inna gałąź dostaje tag ze swoją nazwą.
+          if [ "${GITHUB_REF_NAME}" = "apturn" ]; then
+            TAGS="-t ${IMG}:apturn-${UPSTREAM} -t ${IMG}:apturn-${SHORT} -t ${IMG}:apturn"
+          else
+            TAGS="-t ${IMG}:${GITHUB_REF_NAME}"
+          fi
           docker buildx build --platform linux/amd64 \
             -f Dockerfile.dev \
             --build-arg NEXT_PUBLIC_VERSION=${UPSTREAM}-apturn \
             --provenance=false --sbom=false \
-            -t ${IMG}:apturn-${UPSTREAM} \
-            -t ${IMG}:apturn-${SHORT} \
-            -t ${IMG}:apturn \
-            --push .
+            ${TAGS} --push .

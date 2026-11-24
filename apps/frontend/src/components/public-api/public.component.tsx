@@ -35,7 +35,7 @@ export const mcpConnectorUrls = {
 // the agent installs the CLI itself and asks you for the API key
 export const chatOnlyMcpClients = {
   'Grok Bot':
-    'Install the Postiz CLI with `npm install -g postiz`, then install the Postiz skill with `npx skills add gitroomhq/postiz-agent`. Ask me for my Postiz API key and set it as the POSTIZ_API_KEY environment variable before using the CLI.',
+    'Install the Apturn Social CLI with `npm install -g postiz`, then install the Apturn Social skill with `npx skills add gitroomhq/postiz-agent`. Ask me for my Apturn Social API key and set it as the POSTIZ_API_KEY environment variable before using the CLI.',
 } as const;
 
 export const mcpClients = [
@@ -112,62 +112,62 @@ export const getMcpConfig = (
     switch (client) {
       case 'Claude Code':
         return {
-          config: `claude mcp add postiz --transport http "${oauthUrl}"`,
+          config: `claude mcp add apturn --transport http "${oauthUrl}"`,
           hint: 'Run this command in your terminal.',
         };
       case 'Cursor':
         return {
-          config: json({ mcpServers: { postiz: { url: oauthUrl } } }),
+          config: json({ mcpServers: { apturn: { url: oauthUrl } } }),
           hint: 'Add to .cursor/mcp.json in your project root.',
         };
       case 'VS Code / Copilot':
         return {
           config: json({
-            servers: { postiz: { type: 'http', url: oauthUrl } },
+            servers: { apturn: { type: 'http', url: oauthUrl } },
           }),
           hint: 'Add to .vscode/mcp.json in your project root.',
         };
       case 'Windsurf':
         return {
           config: json({
-            mcpServers: { postiz: { serverUrl: oauthUrl } },
+            mcpServers: { apturn: { serverUrl: oauthUrl } },
           }),
           hint: 'Add to ~/.codeium/windsurf/mcp_config.json',
         };
       case 'Amp':
         return {
-          config: `amp mcp add postiz ${oauthUrl}`,
+          config: `amp mcp add apturn ${oauthUrl}`,
           hint: 'Run this command in your terminal.',
         };
       case 'Codex':
         return {
-          config: `# ~/.codex/config.toml\n\n[mcp_servers.postiz]\nurl = "${oauthUrl}"`,
-          hint: 'Add to ~/.codex/config.toml, then run: codex mcp login postiz',
+          config: `# ~/.codex/config.toml\n\n[mcp_servers.apturn]\nurl = "${oauthUrl}"`,
+          hint: 'Add to ~/.codex/config.toml, then run: codex mcp login apturn',
         };
       case 'Gemini CLI':
         return {
-          config: json({ mcpServers: { postiz: { url: oauthUrl } } }),
+          config: json({ mcpServers: { apturn: { url: oauthUrl } } }),
           hint: 'Add to ~/.gemini/settings.json',
         };
       case 'Warp':
         return {
-          config: json({ postiz: { url: oauthUrl } }),
+          config: json({ apturn: { url: oauthUrl } }),
           hint: 'Settings > MCP Servers > + Add, then paste this config.',
         };
       case 'Hermes':
         return {
-          config: `# ~/.hermes/config.yaml\n\nmcp_servers:\n  postiz:\n    url: "${oauthUrl}"\n    auth: oauth`,
+          config: `# ~/.hermes/config.yaml\n\nmcp_servers:\n  apturn:\n    url: "${oauthUrl}"\n    auth: oauth`,
           hint: 'Add to ~/.hermes/config.yaml, then run /reload-mcp in the chat.',
         };
       case 'OpenClaw':
         return {
-          config: `openclaw mcp add postiz --url ${oauthUrl} --transport streamable-http --auth oauth && openclaw mcp login postiz`,
+          config: `openclaw mcp add apturn --url ${oauthUrl} --transport streamable-http --auth oauth && openclaw mcp login apturn`,
           hint: 'Run this command in your terminal.',
         };
       case 'NanoClaw':
         return {
-          config: `ncl groups config add-mcp-server --id <group-id> --name postiz --url ${oauthUrl}`,
-          hint: 'Run this in your terminal, replace <group-id> with the agent group that should get Postiz.',
+          config: `ncl groups config add-mcp-server --id <group-id> --name apturn --url ${oauthUrl}`,
+          hint: 'Run this in your terminal, replace <group-id> with the agent group that should get Apturn Social.',
         };
     }
   }
@@ -175,14 +175,14 @@ export const getMcpConfig = (
   switch (client) {
     case 'Claude Code':
       return {
-        config: `claude mcp add --transport http postiz ${urlBase} --header "Authorization: ${bearer}"`,
+        config: `claude mcp add --transport http apturn ${urlBase} --header "Authorization: ${bearer}"`,
         hint: 'Run this command in your terminal.',
       };
     case 'Cursor':
       return {
         config: json({
           mcpServers: {
-            postiz: { url: urlBase, headers: { Authorization: bearer } },
+            apturn: { url: urlBase, headers: { Authorization: bearer } },
           },
         }),
         hint: 'Add to .cursor/mcp.json in your project root.',
@@ -191,7 +191,7 @@ export const getMcpConfig = (
       return {
         config: json({
           servers: {
-            postiz: {
+            apturn: {
               type: 'http',
               url: urlBase,
               headers: { Authorization: bearer },
@@ -204,7 +204,7 @@ export const getMcpConfig = (
       return {
         config: json({
           mcpServers: {
-            postiz: {
+            apturn: {
               serverUrl: urlBase,
               headers: { Authorization: bearer },
             },
@@ -216,21 +216,21 @@ export const getMcpConfig = (
       return {
         config: json({
           'amp.mcpServers': {
-            postiz: { url: urlBase, headers: { Authorization: bearer } },
+            apturn: { url: urlBase, headers: { Authorization: bearer } },
           },
         }),
         hint: 'Add to your Amp settings.json',
       };
     case 'Codex':
       return {
-        config: `# ~/.codex/config.toml\n\n[mcp_servers.postiz]\nurl = "${urlBase}"\nhttp_headers = { "Authorization" = "${bearer}" }`,
+        config: `# ~/.codex/config.toml\n\n[mcp_servers.apturn]\nurl = "${urlBase}"\nhttp_headers = { "Authorization" = "${bearer}" }`,
         hint: 'Add to ~/.codex/config.toml',
       };
     case 'Gemini CLI':
       return {
         config: json({
           mcpServers: {
-            postiz: { url: urlBase, headers: { Authorization: bearer } },
+            apturn: { url: urlBase, headers: { Authorization: bearer } },
           },
         }),
         hint: 'Add to ~/.gemini/settings.json',
@@ -238,13 +238,13 @@ export const getMcpConfig = (
     case 'Warp':
       return {
         config: json({
-          postiz: { url: urlBase, headers: { Authorization: bearer } },
+          apturn: { url: urlBase, headers: { Authorization: bearer } },
         }),
         hint: 'Settings > MCP Servers > + Add, then paste this config.',
       };
     case 'Hermes':
       return {
-        config: `# ~/.hermes/config.yaml\n\nmcp_servers:\n  postiz:\n    url: "${urlBase}"\n    headers:\n      Authorization: "${bearer}"`,
+        config: `# ~/.hermes/config.yaml\n\nmcp_servers:\n  apturn:\n    url: "${urlBase}"\n    headers:\n      Authorization: "${bearer}"`,
         hint: 'Add to ~/.hermes/config.yaml, then run /reload-mcp in the chat.',
       };
     case 'OpenClaw':
@@ -252,7 +252,7 @@ export const getMcpConfig = (
         config: json({
           mcp: {
             servers: {
-              postiz: {
+              apturn: {
                 url: urlBase,
                 transport: 'streamable-http',
                 headers: { Authorization: bearer },
@@ -265,8 +265,8 @@ export const getMcpConfig = (
     case 'NanoClaw':
       // No headers flag, the key travels inside the URL like remote clients
       return {
-        config: `ncl groups config add-mcp-server --id <group-id> --name postiz --url ${mcpBase}/mcp/${apiKey}`,
-        hint: 'Run this in your terminal, replace <group-id> with the agent group that should get Postiz.',
+        config: `ncl groups config add-mcp-server --id <group-id> --name apturn --url ${mcpBase}/mcp/${apiKey}`,
+        hint: 'Run this in your terminal, replace <group-id> with the agent group that should get Apturn Social.',
       };
   }
 };
@@ -316,8 +316,8 @@ const McpSection = ({
   const t = useT();
   const { billingEnabled } = useVariables();
   const [activeClient, setActiveClient] = useState<AnyMcpClient>('Claude');
-  const officialConnectors = billingEnabled || isSelfHosted;
-  // the directory connectors come first wherever they work
+  const officialConnectors = billingEnabled;
+  // the directory connectors are the upstream cloud's, not ours
   const tabs: Array<'official' | McpAuth> = officialConnectors
     ? ['official', 'oauth', 'apikey']
     : ['oauth', 'apikey'];
@@ -354,7 +354,7 @@ const McpSection = ({
           <div className="text-[13px] text-customColor18 mt-[2px]">
             {t(
               'connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster',
-              'Connect Postiz MCP server to your client (Http streaming) to schedule your posts faster.'
+              'Connect Apturn Social MCP server to your client (Http streaming) to schedule your posts faster.'
             )}
           </div>
         </div>
@@ -379,14 +379,16 @@ const McpSection = ({
               </a>
             </>
           )}
-          <a
-            className="cursor-pointer px-[16px] h-[36px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-            href="https://docs.postiz.com/mcp/introduction"
-            target="_blank"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
-            {t('read_the_docs', 'Docs')}
-          </a>
+          {billingEnabled && (
+            <a
+              className="cursor-pointer px-[16px] h-[36px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+              href="https://docs.postiz.com/mcp/introduction"
+              target="_blank"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+              {t('read_the_docs', 'Docs')}
+            </a>
+          )}
         </div>
       </div>
       <div className="p-[20px] mobile:p-[14px] flex flex-col gap-[16px]">
@@ -411,7 +413,7 @@ const McpSection = ({
                   {m === 'official'
                     ? t('official_connector', 'Official connector')
                     : m === 'oauth'
-                    ? t('sign_in_no_api_key', 'Sign in with Postiz (no API key)')
+                    ? t('sign_in_no_api_key', 'Sign in with Apturn Social (no API key)')
                     : t('api_key', 'API Key')}
                 </button>
               ))}
@@ -424,12 +426,12 @@ const McpSection = ({
               {isSelfHosted
                 ? t(
                     'connector_self_hosted_description',
-                    'The official connector works with self-hosted Postiz too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
+                    'The official connector works with self-hosted Apturn Social too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
                     { url: mcpBase, interpolation: { escapeValue: false } }
                   )
                 : t(
                     'connector_onboarding_description',
-                    'The fastest way: add Postiz with one click, you will be asked to sign in'
+                    'The fastest way: add Apturn Social with one click, you will be asked to sign in'
                   )}
             </div>
             <div className="flex flex-wrap gap-[8px]">
@@ -462,7 +464,7 @@ const McpSection = ({
             {[
               ...Object.keys(remoteMcpClients),
               ...mcpClients,
-              ...Object.keys(chatOnlyMcpClients),
+              ...(billingEnabled ? Object.keys(chatOnlyMcpClients) : []),
             ].map((client) => (
               <button
                 key={client}
@@ -490,7 +492,7 @@ const McpSection = ({
               !chatOnly &&
               ` ${t(
                 'oauth_sign_in_hint',
-                'Your agent will open a browser window to sign in to Postiz.'
+                'Your agent will open a browser window to sign in to Apturn Social.'
               )}`}
           </div>
           <pre className="bg-newBgColorInner border border-newBorder rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
@@ -582,7 +584,7 @@ export const localCliSteps = [
     code: 'postiz auth:login',
   },
   {
-    label: 'Install the Postiz skill for your AI agent',
+    label: 'Install the Apturn Social skill for your AI agent',
     code: 'npx skills add gitroomhq/postiz-agent',
   },
 ] as const;
@@ -597,7 +599,7 @@ const ciCliSteps = [
     code: 'export POSTIZ_API_KEY="{API_KEY}"',
   },
   {
-    label: 'Install the Postiz skill for your AI agent',
+    label: 'Install the Apturn Social skill for your AI agent',
     code: 'npx skills add gitroomhq/postiz-agent',
   },
 ] as const;
@@ -636,7 +638,7 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
           <div className="text-[13px] text-customColor18 mt-[2px]">
             {t(
               'cli_description',
-              'Use the Postiz CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
+              'Use the Apturn Social CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
             )}
           </div>
         </div>
@@ -726,7 +728,7 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
 
 const PublicApiContent = () => {
   const user = useUser();
-  const { backendUrl, frontEndUrl, mcpUrl } = useVariables();
+  const { backendUrl, frontEndUrl, mcpUrl, billingEnabled } = useVariables();
   const toaster = useToaster();
   const fetch = useFetch();
   const decision = useDecisionModal();
@@ -770,7 +772,7 @@ const PublicApiContent = () => {
         <br />
         {t(
           'api_auth_note_line2',
-          'If you are building a product that schedules posts on behalf of other Postiz users,'
+          'If you are building a product that schedules posts on behalf of other Apturn Social users,'
         )}
         <br />
         {t(
@@ -792,27 +794,31 @@ const PublicApiContent = () => {
             <div className="text-[13px] text-customColor18 mt-[2px]">
               {t(
                 'use_postiz_api_to_integrate_with_your_tools',
-                'Use Postiz API to integrate with your tools.'
+                'Use Apturn Social API to integrate with your tools.'
               )}
             </div>
           </div>
           <div className="flex flex-wrap gap-[6px] shrink-0 pt-[2px]">
-            <a
-              className="cursor-pointer px-[16px] h-[36px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-              href="https://docs.postiz.com/public-api"
-              target="_blank"
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
-            {t('read_the_docs', 'Docs')}
-            </a>
-            <a
-              className="cursor-pointer px-[16px] h-[36px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-              href="https://www.npmjs.com/package/n8n-nodes-postiz"
-              target="_blank"
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
-              {t('n8n_node', 'N8N Node')}
-            </a>
+            {billingEnabled && (
+              <a
+                className="cursor-pointer px-[16px] h-[36px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+                href="https://docs.postiz.com/public-api"
+                target="_blank"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+              {t('read_the_docs', 'Docs')}
+              </a>
+            )}
+            {billingEnabled && (
+              <a
+                className="cursor-pointer px-[16px] h-[36px] bg-[#612BD3] hover:bg-[#5520CB] text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+                href="https://www.npmjs.com/package/n8n-nodes-postiz"
+                target="_blank"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                {t('n8n_node', 'N8N Node')}
+              </a>
+            )}
           </div>
         </div>
         <div className="p-[20px] mobile:p-[14px] flex flex-col gap-[16px]">
@@ -914,7 +920,7 @@ const PublicApiContent = () => {
         </div>
       </div>
 
-      <CliSection apiKey={user.publicApi} />
+      {billingEnabled && <CliSection apiKey={user.publicApi} />}
 
       <McpSection user={user} mcpBase={mcpBase} />
     </div>
