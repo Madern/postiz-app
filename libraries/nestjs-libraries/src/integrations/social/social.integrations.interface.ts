@@ -15,6 +15,7 @@ export interface IAuthenticator {
     clientInformation?: ClientInformation
   ): Promise<AuthTokenDetails | string>;
   refreshToken(refreshToken: string): Promise<AuthTokenDetails>;
+  revokeToken?(accessToken: string, refreshToken?: string): Promise<void>; // Withdraws the app's access on the platform when the channel is deleted
   reConnect?(
     id: string,
     requiredId: string,

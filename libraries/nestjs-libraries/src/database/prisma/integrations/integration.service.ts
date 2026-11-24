@@ -318,6 +318,11 @@ export class IntegrationService {
     integration: Integration,
     err = ''
   ) {
+    // nothing to connect again, the channel is gone
+    if (integration.deletedAt) {
+      return;
+    }
+
     await this._notificationService.inAppNotification(
       orgId,
       `Could not refresh your ${integration.providerIdentifier} channel`,
@@ -398,7 +403,44 @@ export class IntegrationService {
   }
 
   async deleteChannel(org: string, id: string) {
-    return this._integrationRepository.deleteChannel(org, id);
+    const integration = await this._integrationRepository.getIntegrationById(
+      org,
+      id
+    );
+    const deleted = await this._integrationRepository.deleteChannel(org, id);
+
+    if (integration && !integration.deletedAt) {
+      await this.revokeToken(integration);
+    }
+
+    return deleted;
+  }
+
+  // The channel is already deleted here, a platform that refuses or fails must
+  // not bring it back or fail the request
+  private async revokeToken(integration: Integration) {
+    const provider = this._integrationManager.getSocialIntegration(
+      integration.providerIdentifier
+    );
+
+    try {
+      if (
+        !provider?.revokeToken ||
+        (await this._integrationRepository.isGrantInUse(integration))
+      ) {
+        return;
+      }
+
+      await provider.revokeToken(
+        integration.token,
+        integration.refreshToken || undefined
+      );
+    } catch (err: any) {
+      console.error(
+        `Could not revoke ${integration.providerIdentifier} integration ${integration.id}`,
+        err?.response?.data || err?.message || err
+      );
+    }
   }
 
   async disableIntegrations(org: string, totalChannels: number) {

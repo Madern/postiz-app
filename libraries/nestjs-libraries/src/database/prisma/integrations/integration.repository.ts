@@ -211,6 +211,8 @@ export class IntegrationRepository {
         },
         data: {
           internalId: `deleted_${params.internalId}_${makeId(10)}`,
+          token: '',
+          refreshToken: null,
           deletedAt: new Date(),
         },
       });
@@ -415,6 +417,7 @@ export class IntegrationRepository {
             not: upsert.id,
           },
           rootInternalId: rootId,
+          deletedAt: null,
         },
         data: {
           token,
@@ -810,6 +813,8 @@ export class IntegrationRepository {
     });
   }
 
+  // internalId, rootInternalId and name stay: connecting the same channel again
+  // brings back this row with its id and settings
   deleteChannel(org: string, id: string) {
     return this._integration.model.integration.update({
       select: {
@@ -820,9 +825,36 @@ export class IntegrationRepository {
         organizationId: org,
       },
       data: {
+        token: '',
+        refreshToken: null,
+        tokenExpiration: null,
+        customInstanceDetails: null,
+        profile: null,
+        picture: null,
         deletedAt: new Date(),
       },
     });
+  }
+
+  // One login can stand behind several channels (also in other organizations or
+  // providers sharing the platform), withdrawing it would disconnect all of them.
+  // No root id means an old row we can't be sure about.
+  async isGrantInUse(integration: Integration) {
+    if (!integration.rootInternalId) {
+      return true;
+    }
+
+    return (
+      (await this._integration.model.integration.count({
+        where: {
+          id: {
+            not: integration.id,
+          },
+          rootInternalId: integration.rootInternalId,
+          deletedAt: null,
+        },
+      })) > 0
+    );
   }
 
   async deleteIntegrationsForAccount(org: string) {

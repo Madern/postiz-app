@@ -305,6 +305,12 @@ export class YoutubeProvider extends SocialAbstract implements SocialProvider {
     };
   }
 
+  // Google withdraws the whole grant of this account, not only this token
+  async revokeToken(accessToken: string, refreshToken?: string) {
+    const { client } = clientAndYoutube();
+    await client.revokeToken(refreshToken || accessToken);
+  }
+
   async generateAuthUrl() {
     const state = makeSecureId(7);
     const { client } = clientAndYoutube();
