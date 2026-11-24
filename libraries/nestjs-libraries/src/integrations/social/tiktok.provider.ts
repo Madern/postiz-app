@@ -339,6 +339,32 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
     };
   }
 
+  // TikTok revokes access tokens only and they live for a day, so take a fresh one
+  async revokeToken(accessToken: string, refreshToken?: string) {
+    const token = refreshToken
+      ? (await this.refreshToken(refreshToken)).accessToken
+      : accessToken;
+
+    const response = await (
+      await fetch('https://open.tiktokapis.com/v2/oauth/revoke/', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        method: 'POST',
+        body: new URLSearchParams({
+          client_key: process.env.TIKTOK_CLIENT_ID!,
+          client_secret: process.env.TIKTOK_CLIENT_SECRET!,
+          token,
+        }).toString(),
+      })
+    ).text();
+
+    // an empty body means the access was withdrawn
+    if (response.indexOf('error') > -1) {
+      throw new Error(response);
+    }
+  }
+
   async generateAuthUrl() {
     const state = makeSecureId(16);
 
