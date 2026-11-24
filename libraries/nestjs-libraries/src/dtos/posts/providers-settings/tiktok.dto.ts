@@ -77,6 +77,8 @@ export class TikTokDto {
   })
   title: string;
 
+  // the post screen has no default privacy, and UPLOAD doesn't ask for one
+  @ValidateIf((p) => p.content_posting_method !== 'UPLOAD')
   @IsIn([
     'PUBLIC_TO_EVERYONE',
     'MUTUAL_FOLLOW_FRIENDS',
@@ -86,7 +88,7 @@ export class TikTokDto {
   @IsString()
   @JSONSchema({
     description:
-      'Applied only when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD.',
+      'Required when content_posting_method=DIRECT_POST. Ignored by TikTok on UPLOAD.',
   })
   privacy_level:
     | 'PUBLIC_TO_EVERYONE'

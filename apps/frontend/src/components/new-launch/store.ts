@@ -136,6 +136,12 @@ interface StoreState {
   setInlineImages: (inlineImages: boolean) => void;
   setLoaded?: (loaded: boolean) => void;
   setChars: (id: string, chars: number) => void;
+  // why a channel can't be published, `now` blocks only posting right away
+  blocked: Record<string, { reason: string; now?: boolean } | undefined>;
+  setBlocked: (
+    id: string,
+    blocked?: { reason: string; now?: boolean }
+  ) => void;
   chars: Record<string, number>;
   setComments: (comments: boolean | 'no-media') => void;
 }
@@ -162,6 +168,7 @@ const initialState = {
   global: [] as Values[],
   internal: [] as Internal[],
   chars: {},
+  blocked: {},
 };
 
 export const useLaunchStore = create<StoreState>()((set) => ({
@@ -645,6 +652,13 @@ export const useLaunchStore = create<StoreState>()((set) => ({
       chars: {
         ...state.chars,
         [id]: chars,
+      },
+    })),
+  setBlocked: (id: string, blocked?: { reason: string; now?: boolean }) =>
+    set((state) => ({
+      blocked: {
+        ...state.blocked,
+        [id]: blocked,
       },
     })),
   setComments: (comments: boolean | 'no-media') =>

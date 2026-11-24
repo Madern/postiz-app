@@ -109,6 +109,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
     setHide,
     channelDates,
     setChannelDate,
+    blocked,
   } = useLaunchStore(
     useShallow((state) => ({
       hide: state.hide,
@@ -127,8 +128,16 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       setSelectedIntegrations: state.setSelectedIntegrations,
       locked: state.locked,
       activateExitButton: state.activateExitButton,
+      blocked: state.blocked,
     }))
   );
+  const blockedChannels = dummy
+    ? []
+    : selectedIntegrations
+        .map((p) => blocked[p.integration.id])
+        .filter((p) => p);
+  const scheduleBlocked = blockedChannels.find((p) => !p?.now)?.reason;
+  const nowBlocked = blockedChannels[0]?.reason;
   // the other channels of an existing post show and move only their own date
   const channelDate = channelDates[current];
   const pickerDate = channelDate || date;
@@ -320,6 +329,13 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
 
   const schedule = useCallback(
     (type: 'draft' | 'now' | 'schedule' | 'update') => async () => {
+      const blockReason =
+        type === 'now' ? nowBlocked : type === 'schedule' && scheduleBlocked;
+      if (blockReason) {
+        toaster.show(blockReason, 'warning');
+        return;
+      }
+
       let republish = false;
       // the channels saved as another type, the rest are saved as `type`
       const saveAs: Record<string, 'draft' | 'schedule' | 'update'> = {};
@@ -820,6 +836,8 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       addEditSets,
       dummy,
       shortlinkPreferenceData,
+      nowBlocked,
+      scheduleBlocked,
     ]
   );
 
@@ -1110,6 +1128,11 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             </div>
           </div>
         </div>
+        {/* what a channel has to say before it's published */}
+        <div
+          id="publish-notes"
+          className="px-[20px] py-[10px] border-t border-newBorder text-[13px] flex flex-col gap-[4px] empty:hidden"
+        />
         <div className="select-none h-[84px] py-[20px] border-t border-newBorder flex items-center mobile:hidden">
           <div className="flex-1 flex ps-[20px] gap-[8px]">
             {/* keep a single tags component mounted, the tags sheet has its own */}
@@ -1174,8 +1197,12 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               <div ref={postNowRef} className="group cursor-pointer relative">
                 <button
                   disabled={
-                    selectedIntegrations.length === 0 || loading || locked
+                    selectedIntegrations.length === 0 ||
+                    loading ||
+                    locked ||
+                    !!scheduleBlocked
                   }
+                  title={scheduleBlocked}
                   onClick={schedule('schedule')}
                   className="text-white relative min-w-[180px] btnSub disabled:cursor-not-allowed disabled:opacity-80 outline-none gap-[8px] flex justify-center items-center h-[44px] rounded-[8px] bg-[#612BD3] ps-[20px] pe-[16px]"
                 >
@@ -1216,8 +1243,12 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                   <button
                     onClick={schedule('now')}
                     disabled={
-                      selectedIntegrations.length === 0 || loading || locked
+                      selectedIntegrations.length === 0 ||
+                      loading ||
+                      locked ||
+                      !!nowBlocked
                     }
+                    title={nowBlocked}
                     className={clsx(
                       'rounded-[8px] z-[300] disabled:cursor-not-allowed disabled:opacity-80 absolute bottom-[100%] -left-[12px] p-[12px] w-[206px] bg-newBgColorInner',
                       showPostNow ? 'flex' : 'hidden group-hover:flex'

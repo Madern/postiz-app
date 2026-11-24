@@ -936,5 +936,14 @@
   "connect_link_expired": "Ten link jest już nieważny",
   "connect_link_expired_description": "Linki do połączenia działają przez godzinę. Poproś osobę, która Ci go przesłała, o nowy.",
   "auth_tagline": "Planowanie i publikacja w mediach społecznościowych",
-  "source_code": "Kod źródłowy"
+  "source_code": "Kod źródłowy",
+  "tiktok_branded_content_not_private": "Treści sponsorowane nie mogą być prywatne.",
+  "tiktok_select_privacy": "Wybierz, kto może zobaczyć ten post na TikToku.",
+  "tiktok_disclosure_choice_missing": "Zaznacz, czy treść promuje Ciebie, inną firmę, czy obie strony.",
+  "tiktok_video_too_long": "To konto TikTok może publikować filmy do {{seconds}} s.",
+  "tiktok_processing_notice": "Po publikacji film może pojawić się na profilu TikTok dopiero po kilku minutach.",
+  "tiktok_posting_as": "Publikujesz na TikToku jako",
+  "tiktok_try_again_later": "Spróbuj ponownie później.",
+  "tiktok_labeled_paid_partnership": "Zdjęcie lub film zostanie oznaczone jako „Płatna współpraca”.",
+  "tiktok_labeled_promotional_content": "Zdjęcie lub film zostanie oznaczone jako „Treść promocyjna”."
 }

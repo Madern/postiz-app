@@ -18,6 +18,7 @@ import {
 import { TikTokDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/tiktok.dto';
 import { timer } from '@gitroom/helpers/utils/timer';
 import { hasExtension } from '@gitroom/helpers/utils/has.extension';
+import { DashboardFunction } from '@gitroom/nestjs-libraries/integrations/dashboard.function.decorator';
 import { createReadStream } from 'fs';
 import { getSsrfSafeDispatcher } from '@gitroom/nestjs-libraries/dtos/webhooks/ssrf.safe.dispatcher';
 import { Integration } from '@prisma/client';
@@ -417,11 +418,12 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
     };
   }
 
-  async maxVideoLength(accessToken: string) {
-    const {
-      data: { max_video_post_duration_sec },
-    } = await (
-      await fetch(
+  // What TikTok requires the post screen to show and respect: who is posting,
+  // and the privacy levels, interactions and duration the account allows
+  @DashboardFunction()
+  async creatorInfo(accessToken: string) {
+    const { data, error } = await (
+      await this.fetch(
         'https://open.tiktokapis.com/v2/post/publish/creator_info/query/',
         {
           method: 'POST',
@@ -433,8 +435,21 @@ export class TiktokProvider extends SocialAbstract implements SocialProvider {
       )
     ).json();
 
+    // a 200 with an error code: the account can't post right now
+    if (error?.code && error.code !== 'ok') {
+      return {
+        cannotPost: this.handleErrors(error.code)?.value || error.message,
+      };
+    }
+
     return {
-      maxDurationSeconds: max_video_post_duration_sec,
+      nickname: data.creator_nickname,
+      username: data.creator_username,
+      privacyLevels: data.privacy_level_options,
+      commentDisabled: data.comment_disabled,
+      duetDisabled: data.duet_disabled,
+      stitchDisabled: data.stitch_disabled,
+      maxDurationSeconds: data.max_video_post_duration_sec,
     };
   }
 
